@@ -1,3 +1,75 @@
 @use "variables" as *;
+@use "mixins" as *;
 
-/* Header styles will be added in a later milestone. */
+.app {
+  width: min(100%, 960px);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.header__actions,
+.header__stats {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.button {
+  @include flex-center;
+  border: none;
+  border-radius: 10px;
+  padding: 0.75rem 1.25rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.button--primary {
+  background: #1f1f1f;
+  color: #ffffff;
+}
+
+.button--secondary {
+  background: #ececec;
+  color: $color-text;
+}
+
+.stat {
+  min-width: 120px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background: #f3f3f3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+.stat__label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #555555;
+}
+
+.stat__value {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
