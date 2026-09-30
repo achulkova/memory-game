@@ -3,21 +3,27 @@
 
 .app {
   width: min(100%, 960px);
+  height: calc(100dvh - 24px);
+  max-height: calc(100dvh - 24px);
   background: rgba(9, 16, 30, 0.8);
   border: 1px solid rgba(127, 171, 255, 0.2);
   border-radius: 26px;
   box-shadow: 0 18px 40px rgba(3, 8, 18, 0.5);
-  padding: 24px;
+  padding: 12px 14px 14px;
   backdrop-filter: blur(6px);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 12px;
   flex-wrap: wrap;
-  padding: 8px 4px 20px;
+  padding: 4px 4px 12px;
+  flex-shrink: 0;
 }
 
 .header__actions,

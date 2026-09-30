@@ -1,3 +1,5 @@
+import { buildShuffledDeck, createCardElement } from './game.js';
+
 const createElement = (tagName, className, textContent) => {
   const element = document.createElement(tagName);
 
@@ -21,32 +23,6 @@ const createCounter = (label, value) => {
   return counter;
 };
 
-const createCard = (imageName) => {
-  const card = createElement('button', 'memory-card');
-  card.type = 'button';
-
-  const inner = createElement('span', 'memory-card__inner');
-  const frontFace = createElement('span', 'memory-card__face memory-card__face--front');
-  const backFace = createElement('span', 'memory-card__face memory-card__face--back');
-
-  const frontImage = document.createElement('img');
-  frontImage.src = `./assets/images/${imageName}.png`;
-  frontImage.alt = imageName;
-  frontImage.loading = 'lazy';
-
-  const backImage = document.createElement('img');
-  backImage.src = './assets/images/card-back.png';
-  backImage.alt = 'Memory card back';
-  backImage.loading = 'lazy';
-
-  frontFace.append(frontImage);
-  backFace.append(backImage);
-  inner.append(frontFace, backFace);
-  card.append(inner);
-
-  return card;
-};
-
 const app = createElement('div', 'app');
 const header = createElement('header', 'header');
 const actions = createElement('div', 'header__actions');
@@ -54,26 +30,105 @@ const newGameButton = createElement('button', 'button button--primary', 'New Gam
 const leaderboardButton = createElement('button', 'button button--secondary', 'Leaderboard');
 const stats = createElement('div', 'header__stats');
 const movesCounter = createCounter('Moves', '0');
+const movesValue = movesCounter.lastElementChild;
 const pairsCounter = createCounter('Pairs', '0');
+const pairsValue = pairsCounter.lastElementChild;
 const gameBoard = createElement('main', 'game-board');
 
-const cardFaces = [
-  'astronaut',
-  'comet',
-  'moon',
-  'planet',
-  'rocket',
-  'satellite',
-  'star',
-  'ufo',
-];
+const gameState = {
+  selectedCards: [],
+  matchedPairs: 0,
+  moves: 0,
+  isChecking: false,
+};
 
-cardFaces.forEach((faceName) => {
-  gameBoard.append(createCard(faceName), createCard(faceName));
-});
+const updateCounter = (counterElement, value) => {
+  counterElement.textContent = String(value);
+};
+
+const setCardState = (card, isFlipped, isMatched = false) => {
+  card.classList.toggle('is-flipped', isFlipped);
+  card.classList.toggle('is-matched', isMatched);
+};
+
+const finishTurn = () => {
+  const [firstCard, secondCard] = gameState.selectedCards;
+
+  if (!firstCard || !secondCard) {
+    return;
+  }
+
+  if (firstCard.dataset.name === secondCard.dataset.name) {
+    setCardState(firstCard, true, true);
+    setCardState(secondCard, true, true);
+    gameState.matchedPairs += 1;
+    updateCounter(pairsValue, gameState.matchedPairs);
+    gameState.selectedCards = [];
+    gameState.isChecking = false;
+
+    if (gameState.matchedPairs === 8) {
+      gameState.isChecking = true;
+    }
+
+    return;
+  }
+
+  gameState.isChecking = true;
+  window.setTimeout(() => {
+    setCardState(firstCard, false, false);
+    setCardState(secondCard, false, false);
+    gameState.selectedCards = [];
+    gameState.isChecking = false;
+  }, 600);
+};
+
+const handleCardClick = (event) => {
+  const card = event.currentTarget;
+
+  if (gameState.isChecking || card.classList.contains('is-matched') || card.classList.contains('is-flipped')) {
+    return;
+  }
+
+  setCardState(card, true, false);
+  gameState.selectedCards.push(card);
+
+  if (gameState.selectedCards.length < 2) {
+    return;
+  }
+
+  gameState.moves += 1;
+  updateCounter(movesValue, gameState.moves);
+
+  finishTurn();
+};
+
+const resetBoard = () => {
+  while (gameBoard.firstChild) {
+    gameBoard.removeChild(gameBoard.firstChild);
+  }
+
+  gameState.selectedCards = [];
+  gameState.matchedPairs = 0;
+  gameState.moves = 0;
+  gameState.isChecking = false;
+
+  updateCounter(movesValue, 0);
+  updateCounter(pairsValue, 0);
+
+  const deck = buildShuffledDeck();
+
+  deck.forEach((faceName) => {
+    const card = createCardElement(faceName, handleCardClick);
+    gameBoard.append(card);
+  });
+};
+
+newGameButton.addEventListener('click', resetBoard);
 
 actions.append(newGameButton, leaderboardButton);
 stats.append(movesCounter, pairsCounter);
 header.append(actions, stats);
 app.append(header, gameBoard);
 document.body.append(app);
+
+resetBoard();
