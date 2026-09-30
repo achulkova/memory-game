@@ -40,6 +40,7 @@ const gameState = {
   matchedPairs: 0,
   moves: 0,
   isChecking: false,
+  mismatchTimeoutId: null,
 };
 
 const updateCounter = (counterElement, value) => {
@@ -49,6 +50,21 @@ const updateCounter = (counterElement, value) => {
 const setCardState = (card, isFlipped, isMatched = false) => {
   card.classList.toggle('is-flipped', isFlipped);
   card.classList.toggle('is-matched', isMatched);
+};
+
+const flipAllCardsBack = (callback) => {
+  const cards = Array.from(gameBoard.querySelectorAll('.memory-card'));
+
+  cards.forEach((card) => {
+    card.classList.remove('is-matched');
+    setCardState(card, false, false);
+  });
+
+  window.setTimeout(() => {
+    if (typeof callback === 'function') {
+      callback();
+    }
+  }, 550);
 };
 
 const finishTurn = () => {
@@ -74,11 +90,12 @@ const finishTurn = () => {
   }
 
   gameState.isChecking = true;
-  window.setTimeout(() => {
+  gameState.mismatchTimeoutId = window.setTimeout(() => {
     setCardState(firstCard, false, false);
     setCardState(secondCard, false, false);
     gameState.selectedCards = [];
     gameState.isChecking = false;
+    gameState.mismatchTimeoutId = null;
   }, 600);
 };
 
@@ -103,23 +120,35 @@ const handleCardClick = (event) => {
 };
 
 const resetBoard = () => {
-  while (gameBoard.firstChild) {
-    gameBoard.removeChild(gameBoard.firstChild);
+  if (gameState.mismatchTimeoutId) {
+    clearTimeout(gameState.mismatchTimeoutId);
+    gameState.mismatchTimeoutId = null;
   }
 
   gameState.selectedCards = [];
   gameState.matchedPairs = 0;
   gameState.moves = 0;
-  gameState.isChecking = false;
+  gameState.isChecking = true;
 
   updateCounter(movesValue, 0);
   updateCounter(pairsValue, 0);
 
-  const deck = buildShuffledDeck();
+  flipAllCardsBack(() => {
+    while (gameBoard.firstChild) {
+      gameBoard.removeChild(gameBoard.firstChild);
+    }
 
-  deck.forEach((faceName) => {
-    const card = createCardElement(faceName, handleCardClick);
-    gameBoard.append(card);
+    const deck = buildShuffledDeck();
+
+    deck.forEach((faceName) => {
+      const card = createCardElement(faceName, handleCardClick);
+      gameBoard.append(card);
+    });
+
+    gameState.selectedCards = [];
+    gameState.matchedPairs = 0;
+    gameState.moves = 0;
+    gameState.isChecking = false;
   });
 };
 

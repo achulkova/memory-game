@@ -42,13 +42,6 @@
   font-weight: 700;
   letter-spacing: 0.02em;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-}
-
-.button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(90, 108, 179, 0.4);
-  filter: brightness(1.05);
 }
 
 .button--primary {
