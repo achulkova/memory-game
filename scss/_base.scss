@@ -22,7 +22,9 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 24px;
-  background: linear-gradient(180deg, #f7f7f7 0%, #eaeaea 100%);
+  background:
+    radial-gradient(circle at top, rgba(122, 141, 255, 0.36), transparent 36%),
+    linear-gradient(180deg, #020817 0%, #0d1b2a 32%, #111827 100%);
 }
 
 button {
