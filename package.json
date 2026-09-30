@@ -1,0 +1,25 @@
+{
+  "name": "memory-game",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass scss/style.scss css/style.css",
+    "sass:watch": "sass --watch scss/style.scss:css/style.css"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/achulkova/memory-game.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/achulkova/memory-game/issues"
+  },
+  "homepage": "https://github.com/achulkova/memory-game#readme",
+  "devDependencies": {
+    "sass": "^1.105.1"
+  }
+}
