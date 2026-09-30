@@ -242,17 +242,40 @@ button {
   color: #edf5ff;
 }
 
+.modal--wide {
+  width: min(100%, 520px);
+}
+
 .modal__title {
   margin: 0 0 12px;
   font-size: clamp(2rem, 3vw, 2.5rem);
   color: #f5fbff;
 }
 
+.modal__content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .modal__summary,
-.modal__moves {
-  margin: 0 0 18px;
+.modal__moves,
+.leaderboard__empty {
+  margin: 0;
   font-size: 1.05rem;
   color: rgba(237, 245, 255, 0.9);
+}
+
+.leaderboard__list {
+  margin: 0;
+  padding-left: 1.4rem;
+  text-align: left;
+  color: #edf5ff;
+}
+
+.leaderboard__item {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(168, 195, 255, 0.15);
 }
 
 .modal__actions {
@@ -260,4 +283,5 @@ button {
   justify-content: center;
   gap: 12px;
   flex-wrap: wrap;
+  margin-top: 20px;
 }

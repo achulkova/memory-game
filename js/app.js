@@ -1,5 +1,6 @@
 import { buildShuffledDeck, createCardElement } from './game.js';
-import { createVictoryModal } from './modal.js';
+import { createLeaderboardModal, createVictoryModal } from './modal.js';
+import { addLeaderboardResult, getLeaderboardResults } from './storage.js';
 
 const createElement = (tagName, className, textContent) => {
   const element = document.createElement(tagName);
@@ -51,6 +52,11 @@ const modal = createVictoryModal({
   },
 });
 
+const leaderboardModal = createLeaderboardModal({
+  onClose: () => {},
+  getResults: getLeaderboardResults,
+});
+
 const updateCounter = (counterElement, value) => {
   counterElement.textContent = String(value);
 };
@@ -92,6 +98,7 @@ const finishTurn = () => {
 
     if (gameState.matchedPairs === 8) {
       gameState.isChecking = true;
+      addLeaderboardResult(gameState.moves);
       window.setTimeout(() => {
         modal.open(gameState.moves);
       }, 250);
@@ -132,6 +139,7 @@ const handleCardClick = (event) => {
 
 const resetBoard = () => {
   modal.close();
+  leaderboardModal.close();
 
   if (gameState.mismatchTimeoutId) {
     clearTimeout(gameState.mismatchTimeoutId);
@@ -166,11 +174,14 @@ const resetBoard = () => {
 };
 
 newGameButton.addEventListener('click', resetBoard);
+leaderboardButton.addEventListener('click', () => {
+  leaderboardModal.open();
+});
 
 actions.append(newGameButton, leaderboardButton);
 stats.append(movesCounter, pairsCounter);
 header.append(actions, stats);
 app.append(header, gameBoard);
-document.body.append(app, modal.element);
+document.body.append(app, modal.element, leaderboardModal.element);
 
 resetBoard();
