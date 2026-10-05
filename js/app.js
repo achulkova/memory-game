@@ -74,11 +74,9 @@ const flipAllCardsBack = (callback) => {
     setCardState(card, false, false);
   });
 
-  window.setTimeout(() => {
-    if (typeof callback === 'function') {
-      callback();
-    }
-  }, 550);
+  if (typeof callback === 'function') {
+    callback();
+  }
 };
 
 const finishTurn = () => {
