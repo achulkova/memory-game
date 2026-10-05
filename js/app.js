@@ -114,7 +114,7 @@ const finishTurn = () => {
     gameState.selectedCards = [];
     gameState.isChecking = false;
     gameState.mismatchTimeoutId = null;
-  }, 600);
+  }, 1000);
 };
 
 const handleCardClick = (event) => {
