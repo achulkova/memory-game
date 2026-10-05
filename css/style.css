@@ -13,7 +13,6 @@ body {
   margin: 0;
   min-height: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
 body {
@@ -23,8 +22,12 @@ body {
   justify-content: center;
   align-items: flex-start;
   padding: 12px;
-  overflow: hidden;
   background: url("../assets/images/space-background.jpg") center/cover no-repeat;
+}
+
+html.modal-open,
+body.modal-open {
+  overflow: hidden;
 }
 
 button {

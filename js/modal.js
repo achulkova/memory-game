@@ -34,11 +34,47 @@ const createModalShell = (titleText) => {
   dialog.append(title, content, actions);
   overlay.append(dialog);
 
-  return { overlay, dialog, content, actions };
+  const setScrollLock = (isLocked) => {
+    document.documentElement.classList.toggle('modal-open', isLocked);
+    document.body.classList.toggle('modal-open', isLocked);
+  };
+
+  const closeModal = () => {
+    overlay.classList.remove('is-open');
+    overlay.setAttribute('aria-hidden', 'true');
+    setScrollLock(false);
+  };
+
+  const openModal = () => {
+    overlay.classList.add('is-open');
+    overlay.setAttribute('aria-hidden', 'false');
+    setScrollLock(true);
+  };
+
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay) {
+      closeModal();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && overlay.classList.contains('is-open')) {
+      closeModal();
+    }
+  });
+
+  return { overlay, dialog, content, actions, openModal, closeModal };
 };
 
 export const createVictoryModal = ({ onClose, onNewGame }) => {
-  const { overlay, dialog, content, actions } = createModalShell('You won!');
+  const {
+    overlay,
+    dialog,
+    content,
+    actions,
+    openModal: shellOpenModal,
+    closeModal: shellCloseModal,
+  } = createModalShell('You won!');
   dialog.setAttribute('aria-labelledby', 'victory-modal-title');
   const title = dialog.querySelector('.modal__title');
   title.id = 'victory-modal-title';
@@ -55,25 +91,19 @@ export const createVictoryModal = ({ onClose, onNewGame }) => {
     if (typeof onNewGame === 'function') {
       onNewGame();
     }
-    closeModal();
+    shellCloseModal();
   });
 
   const closeButton = createButton('Close', 'button button--secondary', () => {
     if (typeof onClose === 'function') {
       onClose();
     }
-    closeModal();
+    shellCloseModal();
   });
-
-  const closeModal = () => {
-    overlay.classList.remove('is-open');
-    overlay.setAttribute('aria-hidden', 'true');
-  };
 
   const openModal = (moveCount) => {
     moves.textContent = `Moves: ${moveCount}`;
-    overlay.classList.add('is-open');
-    overlay.setAttribute('aria-hidden', 'false');
+    shellOpenModal();
   };
 
   actions.append(newGameButton, closeButton);
@@ -82,12 +112,19 @@ export const createVictoryModal = ({ onClose, onNewGame }) => {
   return {
     element: overlay,
     open: openModal,
-    close: closeModal,
+    close: shellCloseModal,
   };
 };
 
 export const createLeaderboardModal = ({ onClose, getResults }) => {
-  const { overlay, dialog, content, actions } = createModalShell('Leaderboard');
+  const {
+    overlay,
+    dialog,
+    content,
+    actions,
+    openModal: shellOpenModal,
+    closeModal: shellCloseModal,
+  } = createModalShell('Leaderboard');
   dialog.classList.add('modal--wide');
   dialog.setAttribute('aria-labelledby', 'leaderboard-modal-title');
   const title = dialog.querySelector('.modal__title');
@@ -104,7 +141,7 @@ export const createLeaderboardModal = ({ onClose, getResults }) => {
     if (typeof onClose === 'function') {
       onClose();
     }
-    closeModal();
+    shellCloseModal();
   });
 
   const renderList = (results) => {
@@ -141,16 +178,10 @@ export const createLeaderboardModal = ({ onClose, getResults }) => {
     content.append(list);
   };
 
-  const closeModal = () => {
-    overlay.classList.remove('is-open');
-    overlay.setAttribute('aria-hidden', 'true');
-  };
-
   const openModal = () => {
     const results = typeof getResults === 'function' ? getResults() : [];
     renderList(results);
-    overlay.classList.add('is-open');
-    overlay.setAttribute('aria-hidden', 'false');
+    shellOpenModal();
   };
 
   actions.append(closeButton);
@@ -158,6 +189,6 @@ export const createLeaderboardModal = ({ onClose, getResults }) => {
   return {
     element: overlay,
     open: openModal,
-    close: closeModal,
+    close: shellCloseModal,
   };
 };
