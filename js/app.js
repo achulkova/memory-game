@@ -33,7 +33,7 @@ const leaderboardButton = createElement('button', 'button button--secondary', 'L
 const stats = createElement('div', 'header__stats');
 const movesCounter = createCounter('Moves', '0');
 const movesValue = movesCounter.lastElementChild;
-const pairsCounter = createCounter('Pairs', '0');
+const pairsCounter = createCounter('Pairs', '0/8');
 const pairsValue = pairsCounter.lastElementChild;
 const gameBoard = createElement('main', 'game-board');
 
@@ -90,7 +90,7 @@ const finishTurn = () => {
     setCardState(firstCard, true, true);
     setCardState(secondCard, true, true);
     gameState.matchedPairs += 1;
-    updateCounter(pairsValue, gameState.matchedPairs);
+    updateCounter(pairsValue, `${gameState.matchedPairs}/8`);
     gameState.selectedCards = [];
     gameState.isChecking = false;
 
@@ -150,7 +150,7 @@ const resetBoard = () => {
   gameState.isChecking = true;
 
   updateCounter(movesValue, 0);
-  updateCounter(pairsValue, 0);
+  updateCounter(pairsValue, '0/8');
 
   flipAllCardsBack(() => {
     while (gameBoard.firstChild) {
