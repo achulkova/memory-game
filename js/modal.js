@@ -156,7 +156,27 @@ export const createLeaderboardModal = ({ onClose, getResults }) => {
 
     const sortedResults = [...results]
       .filter((result) => result && typeof result.moves === 'number' && Number.isFinite(result.moves))
-      .sort((first, second) => first.moves - second.moves)
+      .sort((first, second) => {
+        const moveDifference = first.moves - second.moves;
+
+        if (moveDifference !== 0) {
+          return moveDifference;
+        }
+
+        if (first.completedAt === null && second.completedAt === null) {
+          return 0;
+        }
+
+        if (first.completedAt === null) {
+          return 1;
+        }
+
+        if (second.completedAt === null) {
+          return -1;
+        }
+
+        return first.completedAt - second.completedAt;
+      })
       .slice(0, 10);
 
     if (sortedResults.length === 0) {
@@ -171,7 +191,12 @@ export const createLeaderboardModal = ({ onClose, getResults }) => {
     sortedResults.forEach((result, index) => {
       const item = document.createElement('li');
       item.className = 'leaderboard__item';
-      item.textContent = `${index + 1}. ${result.moves} moves`;
+      const date = result.completedAt === null ? 'Unknown date' : new Date(result.completedAt);
+      const formattedDate =
+        date === 'Unknown date'
+          ? date
+          : `${String(date.getDate()).padStart(2, '0')}.${String(date.getMonth() + 1).padStart(2, '0')}.${date.getFullYear()}`;
+      item.textContent = `${index + 1}. ${result.moves} moves - ${formattedDate}`;
       list.append(item);
     });
 
