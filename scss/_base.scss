@@ -26,9 +26,7 @@ body {
   align-items: flex-start;
   padding: 12px;
   overflow: hidden;
-  background:
-    radial-gradient(circle at top, rgba(122, 141, 255, 0.36), transparent 36%),
-    linear-gradient(180deg, #020817 0%, #0d1b2a 32%, #111827 100%);
+  background: url("../assets/images/space-background.jpg") center / cover no-repeat;
 }
 
 button {

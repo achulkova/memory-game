@@ -24,7 +24,7 @@ body {
   align-items: flex-start;
   padding: 12px;
   overflow: hidden;
-  background: radial-gradient(circle at top, rgba(122, 141, 255, 0.36), transparent 36%), linear-gradient(180deg, #020817 0%, #0d1b2a 32%, #111827 100%);
+  background: url("../assets/images/space-background.jpg") center/cover no-repeat;
 }
 
 button {
@@ -32,14 +32,14 @@ button {
 }
 
 .app {
-  width: min(100%, 960px);
-  height: calc(100dvh - 24px);
+  width: min(100%, 100vw - 54px, 100dvh - 162px);
+  height: auto;
   max-height: calc(100dvh - 24px);
-  background: rgba(9, 16, 30, 0.8);
+  padding: 8px;
+  background: rgba(9, 16, 30, 0.86);
   border: 1px solid rgba(127, 171, 255, 0.2);
   border-radius: 26px;
   box-shadow: 0 18px 40px rgba(3, 8, 18, 0.5);
-  padding: 12px 14px 14px;
   backdrop-filter: blur(6px);
   display: flex;
   flex-direction: column;
@@ -47,21 +47,17 @@ button {
 }
 
 .header {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1.2fr 1.3fr 1fr 1fr;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
-  padding: 4px 4px 12px;
+  gap: 8px;
+  padding: 0 0 8px;
   flex-shrink: 0;
 }
 
 .header__actions,
 .header__stats {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  display: contents;
 }
 
 .button {
@@ -88,8 +84,8 @@ button {
 }
 
 .stat {
-  min-width: 130px;
-  padding: 0.7rem 0.9rem;
+  min-width: 0;
+  padding: 0.7rem 0.65rem;
   border-radius: 12px;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(200, 221, 255, 0.18);
@@ -112,6 +108,27 @@ button {
   color: #f9fbff;
 }
 
+@media (max-width: 640px) {
+  .header {
+    gap: 8px;
+    padding-bottom: 6px;
+  }
+  .button {
+    padding: 0.55rem 0.4rem;
+    font-size: 0.78rem;
+  }
+  .stat {
+    padding: 0.55rem 0.35rem;
+    font-size: 0.78rem;
+    gap: 4px;
+  }
+  .stat__label {
+    font-size: 0.62rem;
+  }
+  .stat__value {
+    font-size: 1rem;
+  }
+}
 .game-board {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -121,10 +138,9 @@ button {
   aspect-ratio: 1;
   margin: 0 auto;
   padding: clamp(8px, 1.4vw, 14px);
-  border: 1px solid rgba(155, 190, 255, 0.2);
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(9, 21, 35, 0.75) 0%, rgba(13, 27, 44, 0.9) 100%);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  border: none;
+  background: transparent;
+  box-shadow: none;
   flex: 1 1 auto;
   align-content: center;
 }
@@ -196,23 +212,7 @@ button {
 
 @media (max-width: 1024px) {
   .app {
-    width: min(100%, 760px);
-  }
-}
-@media (max-width: 640px) {
-  .app {
-    padding: 12px 12px 14px;
-  }
-  .header {
-    gap: 8px;
-    padding-bottom: 8px;
-  }
-  .button {
-    padding: 0.7rem 1rem;
-  }
-  .stat {
-    min-width: 110px;
-    padding: 0.55rem 0.7rem;
+    width: min(100%, 100vw - 54px, 100dvh - 162px);
   }
 }
 .modal-overlay {
